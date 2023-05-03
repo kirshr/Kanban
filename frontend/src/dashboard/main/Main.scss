@@ -1,0 +1,10 @@
+@import "../../sass/colors/colors.scss";
+.main {
+    grid-column: 3/-1;
+    grid-row: 2 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: $light-blue-grey;
+}

@@ -1,0 +1,14 @@
+.top-bar {
+    grid-column: 3/-1;
+    grid-row: 1 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 0.2rem solid #979797;
+    padding: 0 2rem;
+    .new-taks {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+}

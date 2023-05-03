@@ -1,0 +1,42 @@
+@import "../colors/colors.scss";
+
+.btn {
+    width: 255px;
+    height: 48px;
+    border-radius: 5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1.8rem;
+}
+.btn-primary_L{
+    background-color: $blue-magenta;
+    color: $white;
+    &:hover {
+        background-color: $blue-magenta-lt;
+    }
+}
+.btn-primary_S{
+    background-color: $blue-magenta;
+    color: $white;
+    height: 40px;
+    &:hover {
+        background-color: $blue-magenta-lt;
+    }
+}
+
+.btn-secondary {
+    background-color: $grey-blue-lt;
+    color: $blue-magenta;
+    height: 40px;
+    &:hover {
+        background-color: $light-blue-grey;
+    }
+}
+.btn-destructive {
+    background-color: $redish;
+    color: $white;
+    height: 40px;
+    &:hover {
+        background-color: $lt-pink;
+    }
+}

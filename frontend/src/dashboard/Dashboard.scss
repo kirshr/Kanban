@@ -1,0 +1,49 @@
+@import "../sass/colors/colors.scss";
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    height: 100vh;
+    position: relative;
+}
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+.boards {
+    height: 90%;
+    padding-right: 1rem;
+}
+.board-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    font-size: 1.2rem;
+    &_selected {
+        background-color: $blue-magenta;
+        color: white;
+        border-top-right-radius: 2rem;
+        border-bottom-right-radius: 2rem;
+    }
+
+}
+.hide-sidebar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
+    margin-bottom: 2rem;
+    p {
+        font-size: 1.2rem;
+    }
+}
+
+.new-board-form {
+    grid-column: 6/10;
+    grid-row: 6/10;
+    z-index: 1000;
+}

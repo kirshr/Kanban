@@ -1,0 +1,50 @@
+@import "../../sass/colors/colors";
+.theme {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $light-blue-grey;
+    margin: 2rem;
+    padding: 1rem 0;
+    gap: 0.5rem;
+}
+.dark-mode-toggle {
+    display: flex;
+
+    label {
+        width: 5rem;
+        height: 2.5rem;
+        position: relative;
+        display: block;
+        background-color: #979797;
+        border-radius: 20rem;
+        box-shadow: inset 0px 5px 15px rgba(0, 0, 0, 0.4), inset 0px -5px 15px rgba(255,255,255,0.4);
+        cursor: pointer;
+        transition: all 0.5s ease;
+    }
+    label:after {
+        content: "";
+        width: 2rem;
+        height: 2rem;
+        position: absolute;
+        top: 0.2rem;
+        left: 0.3rem;
+        background: linear-gradient(180deg, #ffcc89, #d8860b);
+        border-radius: 9rem;
+        box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+        transition: all 0.5s ease;
+    }
+    input {
+        width: 0;
+        height: 0;
+        visibility: hidden;
+    }
+    input:checked + label {
+        background-color: #242424;
+    }
+    input:checked + label:after {
+        left: calc(100% - 0.3rem);
+        transform: translateX(-100%);
+        background: linear-gradient(180deg, #7a7a7a, #4a4a4a);
+    }
+}
