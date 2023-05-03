@@ -1,26 +1,38 @@
 import React, { FC } from 'react'
-
+import { useState } from 'react'
+import './NewBoard.scss'
 import axios from 'axios'
 import IconBoard from '../../../assets/IconBoard'
+import NewBoardForm from '../../../components/newBoard/NewBoardForm'
 interface NewBoardProps {
-  
+  className?: string;
 }
 
 const NewBoard: FC<NewBoardProps> = ({ }) => {
-    const addNewBoard = async () => {
-        try {
-          const res = await axios.post('http://localhost:5000/boards', { title: 'New Board' });
-          console.log(res.data); // logs the newly created board object
-        } catch (error) {
-          console.error(error);
-        }
-      }
-      
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    console.log("open modal: ", openModal);
+    setOpenModal(!openModal);
+  }
+  const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (e.target == document.querySelector('.modal')) {
+      setOpenModal(!openModal);;
+    }
+  }
+    
   return (
-    <div className="board-item board-item_new" onClick={addNewBoard}>
-        <IconBoard />
-        <p>+Create New Board</p>
-    </div>
+    <>
+      <div className="board-item board-item_new" onClick={handleOpenModal}>
+          <IconBoard />
+          <p>+Create New Board</p>
+      </div>
+      <div className={`modal ${openModal ? "open" : ""}`} onClick={closeModal}>
+        <NewBoardForm className={openModal ? "open" : ""} />
+      </div>
+    </>
+
   )
 }
 

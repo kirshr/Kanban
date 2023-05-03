@@ -12,6 +12,9 @@
         margin-left: 1rem;
     }
     .board-item {
+        &:hover {
+            cursor: pointer;
+        }
         p {
             font-size: 1.8rem;
         }
