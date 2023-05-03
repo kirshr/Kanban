@@ -48,18 +48,6 @@ const Sidebar: FC<SidebarProps> = ({ }) => {
                         <p>{board.title}</p>
                     </div>
               ))}
-            <div className="board-item board-item_selected">
-                <IconBoard />
-                <p>Platform Launch</p>
-            </div>
-            <div className="board-item">
-                <IconBoard />
-                <p>Marketing Plan</p>
-            </div>
-            <div className="board-item">
-                <IconBoard />
-                <p>Roadmap</p>
-            </div>
               {/* Add new board */}
             <NewBoard />
               
