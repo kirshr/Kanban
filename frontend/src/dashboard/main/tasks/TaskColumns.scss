@@ -1,0 +1,20 @@
+@import "../../../sass/colors/colors.scss";
+.col {
+  .col-header{
+      h2 {
+          color: $grey-blue-dk;
+          font-weight: 400;
+      }
+  }
+.col-body{
+  background-color: $white;
+  width: 28rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 2rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  p {
+      color: $grey-blue-dk;
+  }
+}
+}

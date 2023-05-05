@@ -1,17 +1,18 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import LogoLight from '../../assets/LogoLight'
-import IconBoard from '../../assets/IconBoard'
+
 import IconHideSidebar from '../../assets/IconHideSidebar'
 import "./Sidebar.scss"
 import ThemeBtn from '../../components/theme/ThemeBtn'
-import NewBoard from './NewBoard/NewBoard'
+import NewBoard from './NewBoardModal/NewBoardModal'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import Boards from './Boards/Boards'
 interface SidebarProps {
-  
+    handleSelectBoard: (e: any) => void;
 }
 
-const Sidebar: FC<SidebarProps> = ({ }) => {
+const Sidebar: FC<SidebarProps> = ({ handleSelectBoard }) => {
     const [boards, setBoards] = useState([]);
     useEffect(() => {
         try {
@@ -20,38 +21,20 @@ const Sidebar: FC<SidebarProps> = ({ }) => {
         } catch (error) {
             console.log(error);
         }
-    }, [boards])
+    }, [])
 
-    const handleSelectBoard = (e: any) => {
-        const target = e.target;
-        const boardItem = target.closest(".board-item");
-        const boardItems = document.querySelectorAll(".board-item");
-        boardItems.forEach((item: any) => {
-            item.classList.remove("board-item_selected");
-        })
-        boardItem.classList.toggle("board-item_selected");
-
-    
-
-    }
-
+ 
+      
   return (
     <div className="sidebar">
         <div className="logo">
             <LogoLight/>
         </div>
-        <p>ALL BOARDS (3)</p>
+        <p>ALL BOARDS ({boards.length})</p>
           <div className="boards">
-              {boards.map((board: any) => (
-                  <div className="board-item" key={board._id} onClick={handleSelectBoard}>
-                        <IconBoard />
-                        <p>{board.title}</p>
-                    </div>
-              ))}
-              {/* Add new board */}
-            <NewBoard />
-              
-        </div>
+              <Boards handleSelectBoard={handleSelectBoard} />
+          <NewBoard />
+          </div>
         <ThemeBtn />
         <div className="hide-sidebar">
             <IconHideSidebar />

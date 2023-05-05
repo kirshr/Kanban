@@ -12,3 +12,26 @@
         gap: 1rem;
     }
 }
+
+
+
+#task-modal {
+    width: 48rem;
+    border-radius: 1rem;
+    border: 0.1rem solid #979797;
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        div {
+            display: flex;
+            flex-direction: column;
+            .btn-primary_L,
+            .btn-secondary {
+                width: 100%;
+                margin-top: 1rem;
+            }
+        }
+    }
+
+}

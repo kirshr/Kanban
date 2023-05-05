@@ -9,12 +9,17 @@
     justify-content: center;
     gap: 1rem;
     width: 48rem;
-    height: 42.9rem;
+    height: auto;
     .board-columns {
         display: flex;
         justify-content: space-between;
         input {
             width: 90%;
+        }
+        .color-picker {
+            width: 3rem;
+            border-radius: 50%;
+            border: none;
         }
     }
     .form-btns {
@@ -39,4 +44,5 @@
         }
     }
 }
+
 

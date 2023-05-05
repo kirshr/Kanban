@@ -1,14 +1,13 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { useState } from 'react'
-import './NewBoard.scss'
-import axios from 'axios'
+import './NewBoardModal.scss'
 import IconBoard from '../../../assets/IconBoard'
 import NewBoardForm from '../../../components/newBoard/NewBoardForm'
 interface NewBoardProps {
   className?: string;
 }
 
-const NewBoard: FC<NewBoardProps> = ({ }) => {
+const NewBoardModal: FC<NewBoardProps> = ({ }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => {
@@ -36,4 +35,4 @@ const NewBoard: FC<NewBoardProps> = ({ }) => {
   )
 }
 
-export default NewBoard;
+export default NewBoardModal;
