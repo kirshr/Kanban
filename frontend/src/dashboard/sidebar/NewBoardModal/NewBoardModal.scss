@@ -1,22 +1,18 @@
-.modal {
-  background-color: #00000067;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  ////////////////////////////////Hide modal////////////////////////////////
-  width: 0;
-  height: 0;
-  overflow: hidden;
+#board-modal {
+  border-radius: 1rem;
+  border: 0.1rem solid #ccc;
+  input {
+    border: 0.1rem solid #ccc;
+  }
+  input[type="text"] {
+    width: 100%;
+  }
+  .board-columns {
+    display: flex;
+    gap: 1rem;
+    a {
+      text-decoration: none;
+    }
+  }
 }
 
-.open {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}

@@ -3,25 +3,30 @@ import { useEffect, useState } from 'react'
 import IconBoard from '../../../assets/IconBoard'
 import axios from 'axios'
 interface BoardsProps {
-  handleSelectBoard: (e: any) => void;
+    handleSelectBoard: (e: any) => void;
 }
 
+interface Board {
+  _id: string;
+  title: string;
+  // Add any other properties here
+}
 const Boards: FC<BoardsProps> = ({ handleSelectBoard }) => {
-  const [boards, setBoards] = useState([]);
+  const [boards, setBoards] = useState<Board[]>([]);
 
-
-  
   useEffect(() => {
-      try {
-          axios.get("http://localhost:5000/boards")
-              .then(res => setBoards(res.data.boards))
-      } catch (error) {
-          console.log(error);
-      }
-  }, [])
+    try {
+      axios.get("http://localhost:5000/boards").then(res => {
+        setBoards(res.data.boards);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <>
-      {boards.map((board: any) => (
+      {boards.map(board => (
         <div
           className="board-item"
           key={board._id}
@@ -33,8 +38,7 @@ const Boards: FC<BoardsProps> = ({ handleSelectBoard }) => {
         </div>
       ))}
     </>
-
-  )
-}
+  );
+};
 
 export default Boards;

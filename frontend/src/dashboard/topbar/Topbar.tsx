@@ -11,6 +11,7 @@ interface TopbarProps {
 }
 
 const Topbar: FC<TopbarProps> = ({ boardId, boardColumns }) => {
+  
   const addNewTask = () => {
     const modal = document.getElementById('task-modal') as HTMLDialogElement;
     modal?.showModal();

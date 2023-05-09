@@ -1,0 +1,16 @@
+@import "../../../sass/colors/colors.scss";
+.board-columns-container{
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+
+  .board-column {
+    min-width: 28rem;
+    width: auto;
+    margin: 1rem;
+   p {
+    display: flex;
+    align-items: center;
+   }
+  }
+}

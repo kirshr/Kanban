@@ -30,7 +30,6 @@ const Dashboard: FC<DashboardProps> = ({ }) => {
         .then(res => setBoardColumns(res.data.board.columns))
     };
     
-
     return (
         <div className='dashboard'>
             <Sidebar handleSelectBoard={handleSelectBoard} />

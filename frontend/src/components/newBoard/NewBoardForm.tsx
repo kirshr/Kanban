@@ -9,6 +9,7 @@ interface NewBoardFormProps {
 
 type Board = {
   title: string;
+  _id?: string;
 };
 
 type Column = {
@@ -79,51 +80,51 @@ const NewBoardForm: FC<NewBoardFormProps> = ({}) => {
   
 
   return (
-    <form action="" className="form" onSubmit={handleSubmit}>
-      <h3>Add New Board</h3>
-      <label htmlFor="name">Name</label>
-      <div className="board-title-input">
-        <input
-          type="text"
-          value={board.title}
-          onChange={handleInputChange}
-          name="title"
-        />
-      </div>
-      <label htmlFor="columns">Columns</label>
-      {columns.map((column, index) => (
-        <div className="board-columns" key={index}>
-          <input 
-            type="color" 
-            value={column.color} 
-            onChange={(e) => {
-              setCurrentColorIndex(index);
-              handleColorChange(index, e.target.value);
-            }} 
-            className='color-picker'/>
+      <form action="" className="form" onSubmit={handleSubmit}>
+        <h3>Add New Board</h3>
+        <label htmlFor="name">Name</label>
+        <div className="board-title-input">
           <input
             type="text"
-            name="name"
-            id="name"
-            placeholder="Todo"
-            value={column.name}
-            onChange={(e) => handleColumnChange(e, index)}
-          />
-          <a href="#" onClick={() => removeColumn(index)}>
-            X
-          </a>
-        </div>
-      ))}
-      <div className="form-btns">
-        <div onClick={addNewColumn}>
-          <Button
-            btnName="+Add New Column"
-            className="btn-secondary"
+            value={board.title}
+            onChange={handleInputChange}
+            name="title"
           />
         </div>
-        <input type="submit" value={'Create New Board'} />
-      </div>
-    </form>
+        <label htmlFor="columns">Columns</label>
+        {columns.map((column, index) => (
+          <div className="board-columns" key={index}>
+            <input 
+              type="color" 
+              value={column.color} 
+              onChange={(e) => {
+                setCurrentColorIndex(index);
+                handleColorChange(index, e.target.value);
+              }} 
+              className='color-picker'/>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Todo"
+              value={column.name}
+              onChange={(e) => handleColumnChange(e, index)}
+            />
+            <a href="#" onClick={() => removeColumn(index)}>
+              X
+            </a>
+          </div>
+        ))}
+        <div className="form-btns">
+          <div onClick={addNewColumn}>
+            <Button
+              btnName="+Add New Column"
+              className="btn-secondary"
+            />
+          </div>
+          <input type="submit" value={'Create New Board'} />
+        </div>
+      </form>
   );
 };
 
