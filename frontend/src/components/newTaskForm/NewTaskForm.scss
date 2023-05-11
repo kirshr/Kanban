@@ -1,0 +1,12 @@
+.subtasks {
+  display: flex;
+  flex-direction: row !important;
+  gap: 1rem;
+  input {
+    width: 100%;
+  }
+  a {
+    text-decoration: none;
+  }
+  margin-bottom: 1rem;
+}

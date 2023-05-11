@@ -1,0 +1,31 @@
+@import "../colors/colors.scss";
+
+.dark-mode {
+  background-color: $grey-dk;
+  color: $grey-blue-dk;
+  transition: all 0.5s ease;
+  .logo {
+    svg {
+      g {
+        path {
+          fill: $white;
+        }
+      }
+    }
+  }
+  .main, .theme {
+    background-color: $blue-lt;
+  }
+  .top-bar {
+    h2 {
+      color: $white;
+    }
+  }
+  .task {
+    background-color: $grey-dk;
+    h4 {
+      color: $white;
+    }
+  }
+
+}

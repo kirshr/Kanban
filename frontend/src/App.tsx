@@ -1,11 +1,9 @@
-import GlobalStyles from './globalStyles/global-styles';
-import Dashboard from './dashboard/dashboard';
+import Dashboard from './dashboard/Dashboard';
 function App() {
 
 
   return (
     <>
-      <GlobalStyles />
       <Dashboard/>
     </>
   )

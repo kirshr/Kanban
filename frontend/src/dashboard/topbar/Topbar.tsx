@@ -8,9 +8,10 @@ import NewTaskForm from '../../components/newTaskForm/NewTaskForm'
 interface TopbarProps {
   boardId: string;
   boardColumns: any;
+  fetchTasks: () => void;
 }
 
-const Topbar: FC<TopbarProps> = ({ boardId, boardColumns }) => {
+const Topbar: FC<TopbarProps> = ({ boardId, boardColumns, fetchTasks }) => {
   
   const addNewTask = () => {
     const modal = document.getElementById('task-modal') as HTMLDialogElement;
@@ -28,7 +29,7 @@ const Topbar: FC<TopbarProps> = ({ boardId, boardColumns }) => {
         <IconVerticalEllipsis/>
       </div>
       <dialog id='task-modal'>
-        <NewTaskForm boardId={boardId} boardColumns={boardColumns} />
+        <NewTaskForm boardId={boardId} boardColumns={boardColumns} fetchTasks={fetchTasks } />
       </dialog>
     </div>
   )

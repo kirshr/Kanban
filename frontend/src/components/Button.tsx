@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import "../sass/components/buttons.scss"
 interface ButtonProps {
     className?: string;

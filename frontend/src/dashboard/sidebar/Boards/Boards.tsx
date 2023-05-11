@@ -1,29 +1,15 @@
 import { FC } from 'react'
-import { useEffect, useState } from 'react'
 import IconBoard from '../../../assets/IconBoard'
-import axios from 'axios'
 interface BoardsProps {
-    handleSelectBoard: (e: any) => void;
+  handleSelectBoard: (e: any) => void;
+  boards: Board[];
 }
-
 interface Board {
   _id: string;
   title: string;
   // Add any other properties here
 }
-const Boards: FC<BoardsProps> = ({ handleSelectBoard }) => {
-  const [boards, setBoards] = useState<Board[]>([]);
-
-  useEffect(() => {
-    try {
-      axios.get("http://localhost:5000/boards").then(res => {
-        setBoards(res.data.boards);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
+const Boards: FC<BoardsProps> = ({ handleSelectBoard, boards }) => {
   return (
     <>
       {boards.map(board => (
