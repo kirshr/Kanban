@@ -1,0 +1,9 @@
+.edit-task-dialog {
+  border-radius: 1rem;
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 48rem;
+    gap: 1rem;
+  }
+}

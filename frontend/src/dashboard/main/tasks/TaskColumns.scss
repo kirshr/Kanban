@@ -5,6 +5,9 @@
   border-radius: 1rem;
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   margin-bottom: 2rem;
+  &:hover {
+    cursor: pointer;
+  }
   &:first-of-type {
       margin-top: 2rem;
   }
@@ -15,4 +18,75 @@
       color: $grey-blue-dk;
       font-size: 1.4rem;
   }
+}
+.task-dialog{
+    max-width: 48rem;
+    width: 48rem;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 2.5rem;
+    .task-details {
+        &-title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            h4 {
+                width: 97%;
+            }
+        }
+        &-description {
+            margin-top: 2rem;
+            p {
+                color: $grey-blue-dk;
+                font-size: 1.4rem;
+            }
+        }
+
+        &-subtasks {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding: 1rem;
+            label {
+                width: 100%;
+                margin-top: 2rem;
+            }
+            p, label {
+                color: $grey-blue-dk;
+                font-size: 1.4rem;
+            }
+            div {
+                display: flex;
+                gap: 2rem;
+                background-color: $light-blue-grey;
+                padding: 1rem;
+            }
+        }
+        &-status {
+            display: flex;
+            flex-direction: column;
+            label {
+                color: $grey-blue-dk;
+                font-size: 1.4rem;
+                margin-bottom: 1rem;
+            }
+            select {
+                margin-left: 1rem;
+                padding: 1rem;
+                border-radius: 1rem;
+                border: 0.2rem solid $light-blue-grey;
+            }
+        }
+    }
+    .task-subheading {
+        font-weight: bold;
+    }
+    .edit-task {
+        padding: 0 1rem;
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }

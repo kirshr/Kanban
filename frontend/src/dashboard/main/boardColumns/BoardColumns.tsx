@@ -22,22 +22,20 @@ type Task = {
   title: string;
   status: string;
   boardId: string;
+  description: string;
+  subtasks: string[];
+  subtask: string;
   x: number;
   y: number;
 };
 
 
 const BoardColumns: FC<BoardColumnsProps> = ({ boardColumns = [], boardId = '', tasks, fetchTasks }) => {
-
   const boardTasks = tasks;
-  console.log(boardColumns);
     const handleDragEnd = async (result: DropResult) => {
-      console.log(result);
       const end = result.destination?.droppableId;
-      console.log(end);
       const start = result.source.droppableId;
       const taskId = result.draggableId;
-
       if (start === end) {
         return;
       } else if (start !== end && end !== undefined) {
@@ -76,7 +74,7 @@ const BoardColumns: FC<BoardColumnsProps> = ({ boardColumns = [], boardId = '', 
                   {column.name}
                   <span>({columnTasks.length})</span>
                 </p>
-                <TaskColumns boardId={boardId} column={column} tasks={tasks} />
+                   <TaskColumns boardId={boardId} column={column} tasks={tasks} boardColumns={boardColumns} fetchTasks={fetchTasks} />
                 {provided.placeholder}
               </div>
             )}

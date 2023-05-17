@@ -19,6 +19,9 @@ type Task = {
   title: string;
   status: string;
   boardId: string;
+  description: string;
+  subtasks: string[];
+  subtask: string;
   x: number;
   y: number;
 };

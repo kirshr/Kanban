@@ -1,12 +1,59 @@
-.subtasks {
-  display: flex;
-  flex-direction: row !important;
-  gap: 1rem;
-  input {
-    width: 100%;
+@import "../../sass/colors/colors.scss";
+
+dialog {
+  border: none;
+  border-radius: 1rem;
+  .add-new-task-form {
+    padding: 2.5rem;
+    width: 48rem;
+    max-width: 48rem;
+    display: flex;
+    flex-direction: column;
+    div {
+      display: flex;
+      flex-direction: column;
+      color: $grey-blue-dk;
+      font-size: 1.4rem;
+      margin-bottom: 2rem;
+    }
+    input, textarea, select {
+      padding: 1rem;
+      border: 0.1rem solid $grey-blue-dk;
+      border-radius: 0.5rem;
+    }
+    label {
+      font-weight: bold;
+    }
+    .subtasks {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      input {
+        width: 100%;
+      }
+      a {
+        text-decoration: none;
+      }
+    }
+    .add-subclass {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .btn-secondary {
+        width: 100%;
+      }
+    }
+    .submit-task-btn {
+      width: 100%;
+      input {
+        border-radius: 2rem;
+        background-color: $blue-magenta;
+        color: $white;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
   }
-  a {
-    text-decoration: none;
-  }
-  margin-bottom: 1rem;
 }

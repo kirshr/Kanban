@@ -1,19 +1,19 @@
 import { FC } from 'react'
 import Button from '../Button'
 import axios from 'axios'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './NewTaskForm.scss'
 interface NewTaskFormProps {
   boardId?: string,
   boardColumns?: any
   fetchTasks: () => void;
+  selectedTask?: any;
 }
 type Subtask = {
   subtask: string,
 }
 
-const NewTaskForm: FC<NewTaskFormProps> = ({ boardId, boardColumns, fetchTasks }) => {
-
+const NewTaskForm: FC<NewTaskFormProps> = ({ boardId, boardColumns, fetchTasks,selectedTask }) => {
   const id = boardId;
   const [task, setTask] = useState({
     title: '',
@@ -23,14 +23,33 @@ const NewTaskForm: FC<NewTaskFormProps> = ({ boardId, boardColumns, fetchTasks }
     boardId: id,
     columnId: '',
   });
+
   const [subtasks, setSubTask] = useState<Subtask[]>([
     { subtask: '' },
   ])
+  useEffect(() => {
+    if (selectedTask) {
+      setSubTask(selectedTask.subtasks);
+    }
+  }, [selectedTask]);
+  useEffect(() => {
+    if (selectedTask) {
+      setTask(selectedTask);
+    }
+  }, [selectedTask]);
+
   //Add new subtasks
   const addNewSubtask = () => {
-    setSubTask([...subtasks, { subtask: '' }])
-    console.log("add new subtask");
-  }
+    if (selectedTask) {
+      const updatedSubtasks = [...selectedTask.subtasks, { subtask: '' }];
+      setSubTask(updatedSubtasks);
+      console.log(subtasks);
+    } else {
+      setSubTask([...subtasks, { subtask: '' }]);
+      console.log(subtasks);
+    }
+  };
+  
   //Remove subtasks
   const removeColumn = (index: number) => {
     setSubTask(subtasks.filter((_, i) => i !== index));
@@ -44,23 +63,39 @@ const handleSubtaskChange = (e:React.ChangeEvent<HTMLInputElement>,
   newSubtasks[index] = { ...newSubtasks[index], [name]: value };
   setSubTask(newSubtasks);
 };
-    
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.put('https://kanban-workflow.herokuapp.com/boards/add', {
-        title: task.title,
-        description: task.description,
-        subtasks: subtasks.map(subtask => ({subtask: subtask.subtask})),
-        status: task.status,
-        boardId: id,
-        columnId: task.status,
-      });
-      const modal = document.getElementById('task-modal') as HTMLDialogElement;
-      modal?.close();
-      fetchTasks();
-      console.log(res);
+      if (selectedTask) {
+        const res = await axios.put(`https://kanban-workflow.herokuapp.com/boards/update/${selectedTask._id}`, {
+          title: task.title,
+          description: task.description,
+          subtasks: subtasks.map(subtask => ({subtask: subtask.subtask})),
+          status: task.status,
+          boardId: task.boardId,
+          columnId: task.status,
+        });
+        fetchTasks();
+        console.log(res);
+        const modal = document.getElementById(`edit-task-dialog-${selectedTask._id}`) as HTMLDialogElement;
+        modal?.close();
+        console.log(modal);
+      } else {
+        const res = await axios.put(`https://kanban-workflow.herokuapp.com/boards/add`, {
+          title: task.title,
+          description: task.description,
+          subtasks: subtasks.map(subtask => ({subtask: subtask.subtask})),
+          status: task.status,
+          boardId: id,
+          columnId: task.status,
+        });
+        fetchTasks;
+        console.log(res);
+        const modal = document.getElementById('task-modal') as HTMLDialogElement;
+        modal?.close();
+        fetchTasks();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -79,8 +114,9 @@ const handleSubtaskChange = (e:React.ChangeEvent<HTMLInputElement>,
     setTask((prev) => ({ ...prev, [name]: value }));
   };
 
+  //console.log(task);
   return (
-    <form action="" onSubmit={handleSubmit}>
+    <form action="" onSubmit={handleSubmit} className='add-new-task-form'>
       <div>
         <label htmlFor="title">Title</label>
         <input
@@ -101,21 +137,21 @@ const handleSubtaskChange = (e:React.ChangeEvent<HTMLInputElement>,
       </div>
       <div>
         <label htmlFor="subtasks">Subtasks</label>
-        {subtasks.map((subtask, index) => (
+        { subtasks.map((subtask: Subtask, index: number) => (
           <div key={index} className='subtasks'>
             <input
-              type="text"
-              name="subtask"
-              value={subtask.subtask}
-              onChange={(e)=> handleSubtaskChange(e, index)}
+            type="text"
+            name="subtask"
+            value={subtask.subtask}
+            onChange={(e)=> handleSubtaskChange(e, index)}
             />
             <a href="#" onClick={() => removeColumn(index)}>
-              X
+            X
             </a>
           </div>
         ))}
       </div>
-      <div onClick={addNewSubtask}>
+      <div onClick={addNewSubtask} className='add-subclass'>
         <Button className="btn-secondary" btnName="+Add New Subtask"/>
       </div>
       <div>
@@ -129,8 +165,8 @@ const handleSubtaskChange = (e:React.ChangeEvent<HTMLInputElement>,
           ))}
         </select>
       </div>
-      <div>
-        <input type="submit" />
+      <div className='submit-task-btn'>
+        <input type="submit" value="Save Changes"/>
       </div>
     </form>
   );
