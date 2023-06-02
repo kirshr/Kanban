@@ -8,10 +8,10 @@ import NewTaskForm from '../../components/newTaskForm/NewTaskForm'
 interface TopbarProps {
   boardId: string;
   boardColumns: any;
-  fetchTasks: () => void;
+  fetchBoards: () => void;
 }
 
-const Topbar: FC<TopbarProps> = ({ boardId, boardColumns, fetchTasks }) => {
+const Topbar: FC<TopbarProps> = ({ boardId, boardColumns, fetchBoards }) => {
   
   const addNewTask = () => {
     const modal = document.getElementById('task-modal') as HTMLDialogElement;
@@ -21,17 +21,24 @@ const Topbar: FC<TopbarProps> = ({ boardId, boardColumns, fetchTasks }) => {
 
   return (
     <div className="top-bar">
-        <h2>Platform Launch</h2>
-      <div className="new-taks">
-        <div onClick={addNewTask}>
-          <Button btnName='+Add New Task' className='btn-primary_L'/>
+        <div className='platform-launch-container'>
+          <h2>Platform Launch</h2>
+          <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+            <path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4" />
+          </svg>
+        </div>
+        <div className="new-taks">
+          <div onClick={addNewTask}>
+          <Button btnName='+Add New Task' className='btn-primary_L' />
+          <Button btnName='+' className='btn-primary_L btn-sm' />
         </div>
         <IconVerticalEllipsis/>
-      </div>
-      <dialog id='task-modal'>
-        <NewTaskForm boardId={boardId} boardColumns={boardColumns} fetchTasks={fetchTasks } />
-      </dialog>
+        </div>
+        <dialog id='task-modal'>
+          <NewTaskForm boardId={boardId} boardColumns={boardColumns} fetchBoards={fetchBoards}  />
+        </dialog>
     </div>
+
   )
 }
 

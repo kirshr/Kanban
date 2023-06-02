@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 
 //Import routes
 const boardsRoute = require('./routes/boards');
-const tasksRoute = require('./routes/tasks');
+
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -23,7 +23,7 @@ db.once('open', () => console.log('Connected to Database'))
 
 
 app.use('/boards', boardsRoute);
-app.use('/tasks', tasksRoute);
+
 
 app.listen(process.env.PORT || port, () => {
   console.log(`Server listening on port ${port}`)

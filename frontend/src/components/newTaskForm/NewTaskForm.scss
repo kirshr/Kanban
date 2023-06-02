@@ -4,6 +4,10 @@ dialog {
   border: none;
   border-radius: 1rem;
   .add-new-task-form {
+    h2 {
+      color: $blue-dk !important;
+
+    }
     padding: 2.5rem;
     width: 48rem;
     max-width: 48rem;

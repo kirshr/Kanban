@@ -1,10 +1,17 @@
 @import "../../sass/colors/colors.scss";
+@import "../../sass/abstracts//mixins.scss";
 .main {
     grid-column: 3/-1;
     grid-row: 2 / -1;
     display: flex;
     background-color: $light-blue-grey;
     gap: 2rem;
-    padding: 2.5rem
+    padding: 2.5rem;
+    @include media(sm) {
+        grid-column: 1/-1;
+    }
 }
 
+.toggle-main {
+    grid-column: 1 / -1 !important;
+}

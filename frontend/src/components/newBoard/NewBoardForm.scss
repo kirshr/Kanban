@@ -45,6 +45,15 @@
     }
 }
 
+.board-item_new {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  p {
+    width: 90%;
+    text-align: center;
+  }
+}
 
 #board-modal {
     border-radius: 1rem;

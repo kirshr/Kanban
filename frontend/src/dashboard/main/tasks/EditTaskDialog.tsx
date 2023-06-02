@@ -11,6 +11,7 @@ type Subtask = {
 };
 const EditTaskDialog: FC<EditTaskDialogProps> = ({
   selectedTask, boardColumns }) => {
+
   const [task, setTask] = useState({
     id: "",
     title: "" ,
@@ -19,6 +20,7 @@ const EditTaskDialog: FC<EditTaskDialogProps> = ({
     status:"" ,
     boardId: "",
     columnId: '',
+    checked: false,
   });
 
   const [subtasks, setSubTask] = useState<Subtask[]>([
@@ -35,13 +37,10 @@ const EditTaskDialog: FC<EditTaskDialogProps> = ({
       status: selectedTask.status,
       boardId: selectedTask.boardId,
       columnId: selectedTask.columnId,
+      checked: selectedTask.checked,
     })
   }, [selectedTask])
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // const res = await axios.put()
-    console.log(task.subtasks);
-  }
+
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -69,9 +68,10 @@ const EditTaskDialog: FC<EditTaskDialogProps> = ({
     setTask((prev) => ({ ...prev, [name]: value }));
   };
 
+
   return (
     <dialog id={`edit-task-dialog-${task.id}`} className='edit-task-dialog'>
-      <form action="" onSubmit={handleSubmit}>
+      <form action="">
         <h4>Edit Task</h4>
         <label htmlFor="title">Title</label>
         <input type="text" name='title' value={ task.title } onChange={handleInputChange}/>

@@ -1,0 +1,14 @@
+@import "../../../sass/colors/colors.scss";
+.board-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  div {
+    display: flex;
+      align-items: center;
+  }
+  svg:hover {
+    cursor: pointer;
+    fill: $redish;
+  }
+}

@@ -1,20 +1,28 @@
 import  { FC } from 'react'
 import './BoardColumns.scss';
 import TaskColumns from '../tasks/TaskColumns';
-import axios from 'axios';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 interface BoardColumnsProps {
-  boardColumns: Column[];
   boardId: string; // make it required
   className?: string;
+  fetchBoards: () => void;
+  boards: Board[];
+}
+interface Board {
+  _id: string;
+  title: string;
   tasks: Task[];
-  fetchTasks: () => void;
+  columns: Column[];
 }
 interface Column {
   _id: string;
   name: string;
   color: string;
+}
+interface Subtask {
+  _id: string;
+  title: string;
+  checked: boolean; // Include the 'checked' property for subtasks
 }
 
 type Task = {
@@ -23,43 +31,33 @@ type Task = {
   status: string;
   boardId: string;
   description: string;
-  subtasks: string[];
+  subtasks: Subtask[];
   subtask: string;
   x: number;
   y: number;
 };
 
 
-const BoardColumns: FC<BoardColumnsProps> = ({ boardColumns = [], boardId = '', tasks, fetchTasks }) => {
-  const boardTasks = tasks;
-    const handleDragEnd = async (result: DropResult) => {
-      const end = result.destination?.droppableId;
-      const start = result.source.droppableId;
-      const taskId = result.draggableId;
-      if (start === end) {
-        return;
-      } else if (start !== end && end !== undefined) {
-        const taskToUpdate = boardTasks.filter((task) => task._id === taskId);
-        taskToUpdate[0].status = end as string;
-        const updatedTasks = taskToUpdate[0];
-        try {
-          const res = await axios.put(`https://kanban-workflow.herokuapp.com/boards/update/${taskId}`, updatedTasks);
-          console.log("Succesfully updated task", res);
-          fetchTasks();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
+const BoardColumns: FC<BoardColumnsProps> = ({ boards, boardId, fetchBoards }) => {
+  const myBoard = boards.filter(board => board._id === boardId);
+
+  const boardTasks = myBoard[0]?.tasks;
+  //console.log("Board Tasks: ",boardTasks);
+  if (!boardTasks) {
+    return null;
+  }
+  const boardColumns = myBoard[0].columns;
+  //console.log(boardColumns);
+
+
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
+
       <div className="board-columns-container">
         {boardColumns.map((column: Column) => {
-           const columnTasks = boardTasks.filter((task) => task.status === column._id);
+          const columnTasks = boardTasks.filter((task) => task.status === column._id);
+          //console.log("Column Tasks: ", columnTasks);
            return (
-          <Droppable droppableId={column._id} key={column._id}>
-            {(provided) => (
-              <div className="board-column" {...provided.droppableProps} ref={provided.innerRef} col-id={column._id}>
+              <div className="board-column" col-id={column._id}>
                 <p>
                   <span
                     style={{
@@ -74,14 +72,12 @@ const BoardColumns: FC<BoardColumnsProps> = ({ boardColumns = [], boardId = '', 
                   {column.name}
                   <span>({columnTasks.length})</span>
                 </p>
-                   <TaskColumns boardId={boardId} column={column} tasks={tasks} boardColumns={boardColumns} fetchTasks={fetchTasks} />
-                {provided.placeholder}
+               <TaskColumns columnTasks={columnTasks} boardColumns={boardColumns} fetchBoards={fetchBoards} />
               </div>
             )}
-          </Droppable>
-        )})}
+        )}
       </div>
-    </DragDropContext>
+
   );
 };
 

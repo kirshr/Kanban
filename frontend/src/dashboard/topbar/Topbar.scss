@@ -1,15 +1,36 @@
+@import "../../sass/colors/colors.scss";
+@import "../../sass/abstracts//mixins.scss";
 .top-bar {
     grid-column: 3/-1;
     grid-row: 1 / 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 0.1rem solid #979797;
-    padding: 0 2rem;
+    border-bottom: 1px solid $grey-blue-dk;
+    padding: 0 2.5rem;
     .new-taks {
         display: flex;
         align-items: center;
         gap: 1rem;
+    }
+    .platform-launch-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+    @include media(sm) {
+        grid-column: 2/-1;
+        grid-row: 1 / 2;
+        h2 {
+            font-size: 1.8rem;
+        }
+        .btn-primary_L:first-of-type {
+            display: none;
+        }
+        .btn-primary_L .btn-sm {
+            display: block; 
+        }
     }
 }
 

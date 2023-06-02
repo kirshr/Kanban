@@ -5,39 +5,38 @@ import NewTaskForm from '../../../components/newTaskForm/NewTaskForm';
 interface TaskDialogProps {
   selectedTask: any;
   boardColumns: any;
-  fetchTasks: () => void;
+  fetchBoards: () => void;
 }
 
-const TaskDialog: FC<TaskDialogProps> = ({ selectedTask, boardColumns, fetchTasks }) => {
-  const [id, title, description, subtasks] = [selectedTask._id, selectedTask.title, selectedTask.description, selectedTask.subtasks];
-
+const TaskDialog: FC<TaskDialogProps> = ({ selectedTask, boardColumns, fetchBoards }) => {
+  //console.log(selectedTask);
   const editTask = () => {
-    const editModal = document.querySelector(`#edit-task-dialog-${id}`) as HTMLDialogElement;
-    const taskDetailsModal = document.querySelector(`#task-details-modal-${id}`) as HTMLDialogElement;
+    const editModal = document.querySelector(`#edit-task-dialog-${selectedTask._id}`) as HTMLDialogElement;
+    const taskDetailsModal = document.querySelector(`#task-details-modal-${selectedTask._id}`) as HTMLDialogElement;
     taskDetailsModal.close();
     editModal.showModal();
-
   }
   return (
     <>
-      <dialog id={`task-details-modal-${id}`} className='task-dialog'>
+      <dialog id={`task-details-modal-${selectedTask._id}`} className='task-dialog'>
         <div className="task-details-title">
-          <h4>{title}</h4>
+          <h4>{selectedTask.title}</h4>
           <div onClick={editTask} className='edit-task'>
             <IconVerticalEllipsis />
           </div>
         </div>
         <div className="task-details-description">
-          <p >{description}</p>
-          </div>
+          <p >{selectedTask.description}</p>
+        </div>
           <div className="task-details-subtasks">
           <p className="task-subheading">Subtasks (2 of 3)</p>
-          {subtasks.map((subtask: any, index: number) => (
+          {selectedTask.subtasks.map((subtask: any, index: number) => (
             <div key={index}>
               <input
                 type="checkbox"
+                checked={subtask.checked}
               />
-              <p>{subtask.subtask}</p>
+              <p>{subtask.title}</p>
             </div>
           ))}
         </div>
@@ -52,8 +51,8 @@ const TaskDialog: FC<TaskDialogProps> = ({ selectedTask, boardColumns, fetchTask
           </select>
         </div>
       </dialog>
-      <dialog id={`edit-task-dialog-${id}`}>
-        <NewTaskForm fetchTasks={fetchTasks} boardColumns={boardColumns} selectedTask={selectedTask} />
+      <dialog id={`edit-task-dialog-${selectedTask._id}`}>
+        <NewTaskForm fetchBoards={fetchBoards} boardColumns={boardColumns} selectedTask={selectedTask} />
       </dialog>
     </>
   )

@@ -1,15 +1,12 @@
-import { Draggable } from "react-beautiful-dnd";
+//import { Draggable } from "react-beautiful-dnd";
 import "./TaskColumns.scss"
 import { useState } from "react";
 import TaskDialog from "./TaskDialog";
 
 interface TaskColumnsProps {
-  boardId: string;
-  column: any;
-  onDrop?: (task: Task) => void;
-  tasks: Task[];
+  columnTasks: Task[];
   boardColumns: any;
-  fetchTasks: () => void;
+  fetchBoards: () => void;
 }
 
 interface Task {
@@ -18,50 +15,46 @@ interface Task {
   status: string;
   boardId: string;
   description: string;
-  subtasks: string[];
+  subtasks: Subtask[];
   subtask: string;
   x: number;
   y: number;
 }
-
-const TaskColumns: React.FC<TaskColumnsProps> = ({ boardId, column, tasks, boardColumns, fetchTasks }) => {
-  const filteredTasks = tasks.filter((task) => task.status === column._id && task.boardId === boardId);
-
+interface Subtask {
+  _id: string;
+  title: string;
+  checked: boolean; // Include the 'checked' property for subtasks
+}
+const TaskColumns: React.FC<TaskColumnsProps> = ({ columnTasks, boardColumns, fetchBoards }) => {
   const [selectedTask, setSelectedTask] = useState<Task>();
-
-  const getTaskId = (e: React.MouseEvent<HTMLDivElement>) => {
-    const modal = document.querySelector(`#task-details-modal-${selectedTask?._id}`) as HTMLDialogElement;
-    const taskId = e.currentTarget.dataset.id;
-    const taskDetails = filteredTasks.find((task) => task._id === taskId);
-    setSelectedTask(taskDetails);
-    if (modal) {
-      modal.showModal();
-    }
+    const getTaskId = (e: React.MouseEvent<HTMLDivElement>) => {
+      const taskId = e.currentTarget.dataset.id;
+      const modal = document.querySelector(`#task-details-modal-${taskId}`) as HTMLDialogElement;
+      const taskDetails = columnTasks.find((task) => task._id === taskId);
+      setSelectedTask(taskDetails);
+      if (modal) {
+        modal.showModal();
+      }
   };
-
+  console.log(selectedTask);
+  
+  const taskToRender = columnTasks.map((task) => {
+    const numOfSubtasks = task.subtasks.length;
+    const subtasks = task.subtasks;
+    const checkedSubtasks = subtasks.filter((subtask) => subtask.checked === true);
+    
+    return (
+      <div className="task" key={task._id} onClick={getTaskId} data-id={task._id}>
+        <h4>{task.title}</h4>
+        <p>{checkedSubtasks.length} out of {numOfSubtasks} subtasks</p>
+      </div>
+    );
+  });
+  
   return (
     <>
-      {filteredTasks.map((task: Task, index) => (
-        <Draggable draggableId={task._id} index={index} key={task._id}>
-          {(provider) => (
-            <div
-              className="task"
-              key={task._id}
-              {...provider.draggableProps}
-              {...provider.dragHandleProps}
-              ref={provider.innerRef}
-              onClick={getTaskId}
-              data-id={task._id}
-            >
-              <h4>{task.title}</h4>
-              <p>0 out of 3 substasks</p>
-            </div>
-          )}
-        </Draggable>
-      ))}  
-      {selectedTask && (
-        <TaskDialog selectedTask={selectedTask} boardColumns={boardColumns} fetchTasks={fetchTasks} />
-      )}
+      {taskToRender}
+      {selectedTask && <TaskDialog selectedTask={selectedTask} boardColumns={boardColumns} fetchBoards={fetchBoards} />}
     </>
   );
 };

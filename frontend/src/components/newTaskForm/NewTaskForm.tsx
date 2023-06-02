@@ -6,30 +6,37 @@ import './NewTaskForm.scss'
 interface NewTaskFormProps {
   boardId?: string,
   boardColumns?: any
-  fetchTasks: () => void;
+  fetchBoards: () => void;
   selectedTask?: any;
 }
 type Subtask = {
-  subtask: string,
+  title: string,
+  checked: boolean
 }
 
-const NewTaskForm: FC<NewTaskFormProps> = ({ boardId, boardColumns, fetchTasks,selectedTask }) => {
+const NewTaskForm: FC<NewTaskFormProps> = ({ boardId, boardColumns, fetchBoards, selectedTask }) => {
   const id = boardId;
   const [task, setTask] = useState({
     title: '',
     description: '',
-    subtasks: '',
+    subtasks: {
+      subtask: '',
+      checked: false,
+    },
     status: '',
     boardId: id,
     columnId: '',
   });
 
   const [subtasks, setSubTask] = useState<Subtask[]>([
-    { subtask: '' },
+    {
+      title: '',
+      checked: false,
+    },
   ])
   useEffect(() => {
     if (selectedTask) {
-      setSubTask(selectedTask.subtasks);
+      setSubTask(selectedTask?.subtasks);
     }
   }, [selectedTask]);
   useEffect(() => {
@@ -41,14 +48,20 @@ const NewTaskForm: FC<NewTaskFormProps> = ({ boardId, boardColumns, fetchTasks,s
   //Add new subtasks
   const addNewSubtask = () => {
     if (selectedTask) {
-      const updatedSubtasks = [...selectedTask.subtasks, { subtask: '' }];
+      const updatedSubtasks = [...selectedTask.subtasks, { subtask: '', checked: false }];
       setSubTask(updatedSubtasks);
       console.log(subtasks);
     } else {
-      setSubTask([...subtasks, { subtask: '' }]);
-      console.log(subtasks);
+      const allSubtasksValid = subtasks.every(subtask => subtask.title !== '');
+      if (allSubtasksValid) {
+        setSubTask([...subtasks, { title: '', checked: false }]);
+        console.log(subtasks);
+      } else {
+        console.log('All subtasks must have a title');
+      }
     }
   };
+  
   
   //Remove subtasks
   const removeColumn = (index: number) => {
@@ -56,13 +69,13 @@ const NewTaskForm: FC<NewTaskFormProps> = ({ boardId, boardColumns, fetchTasks,s
   };
 
   //Handle subtask change
-const handleSubtaskChange = (e:React.ChangeEvent<HTMLInputElement>,
-  index: number) => {
-  const { name, value } = e.target;
-  const newSubtasks = [...subtasks];
-  newSubtasks[index] = { ...newSubtasks[index], [name]: value };
-  setSubTask(newSubtasks);
-};
+  const handleSubtaskChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const { name, value } = e.target;
+    const newSubtasks = [...subtasks];
+    newSubtasks[index] = { ...newSubtasks[index], [name]: value };
+    setSubTask(newSubtasks);
+  };
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,30 +84,40 @@ const handleSubtaskChange = (e:React.ChangeEvent<HTMLInputElement>,
         const res = await axios.put(`https://kanban-workflow.herokuapp.com/boards/update/${selectedTask._id}`, {
           title: task.title,
           description: task.description,
-          subtasks: subtasks.map(subtask => ({subtask: subtask.subtask})),
+          subtasks: subtasks.map(subtask => ({title: subtask.title, checked: false})),
           status: task.status,
           boardId: task.boardId,
           columnId: task.status,
         });
-        fetchTasks();
+        fetchBoards();
         console.log(res);
         const modal = document.getElementById(`edit-task-dialog-${selectedTask._id}`) as HTMLDialogElement;
         modal?.close();
         console.log(modal);
       } else {
-        const res = await axios.put(`https://kanban-workflow.herokuapp.com/boards/add`, {
+        const res = await axios.put(`https://kanban-workflow.herokuapp.com/boards/add/${boardId}`, {
           title: task.title,
           description: task.description,
-          subtasks: subtasks.map(subtask => ({subtask: subtask.subtask})),
+          subtasks: subtasks.map(subtask => ({title: subtask.title, checked: false})),
           status: task.status,
           boardId: id,
           columnId: task.status,
         });
-        fetchTasks;
+        fetchBoards();
         console.log(res);
         const modal = document.getElementById('task-modal') as HTMLDialogElement;
         modal?.close();
-        fetchTasks();
+        setTask({
+          title: '',
+          description: '',
+          subtasks: {
+            subtask: '',
+            checked: false,
+          },
+          status: '',
+          boardId: id,
+          columnId: '',
+        })
       }
     } catch (error) {
       console.log(error);
@@ -114,9 +137,11 @@ const handleSubtaskChange = (e:React.ChangeEvent<HTMLInputElement>,
     setTask((prev) => ({ ...prev, [name]: value }));
   };
 
-  //console.log(task);
   return (
     <form action="" onSubmit={handleSubmit} className='add-new-task-form'>
+      {
+      selectedTask === undefined ? <h2>Add New Task</h2> : <h2>Edit Task</h2>
+      }
       <div>
         <label htmlFor="title">Title</label>
         <input
@@ -141,8 +166,8 @@ const handleSubtaskChange = (e:React.ChangeEvent<HTMLInputElement>,
           <div key={index} className='subtasks'>
             <input
             type="text"
-            name="subtask"
-            value={subtask.subtask}
+            name="title"
+            value={subtask.title}
             onChange={(e)=> handleSubtaskChange(e, index)}
             />
             <a href="#" onClick={() => removeColumn(index)}>

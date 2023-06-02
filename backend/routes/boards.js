@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Task = require('../model/TasksModel');
 const Board = require('../model/BoardsModel');
 
 //create a new board
-
 router.post('/', async (req, res) => {
     const title = req.body.title;
     const columns = req.body.columns
@@ -22,7 +20,6 @@ router.post('/', async (req, res) => {
 });
 
 //Get all boards
-
 router.get('/', async (req, res) => {
     try {
         const boards = await Board.find();
@@ -43,45 +40,101 @@ router.get('/:id', async (req, res) => {
 });
 
 
-//Add tasks to board
-router.put('/add', async (req, res) => {
-    const boardId = req.body.boardId;
-    const columnId = req.body.columnId;
-    const task = new Task({
-      title: req.body.title,
-      description: req.body.description,
-      subtasks: req.body.subtasks,
-      status: req.body.status,
-      boardId: boardId,
-    });
-    try {
-      const newTask = await task.save();
-      console.log("My New Task: ", newTask);
-      const updatedBoard = await Board.findOneAndUpdate(
-        { _id: boardId },
-        { $push: { tasks: newTask } },
-        { new: true }
-      );
-      
-      res.status(201).json({ message: 'Task added to board', updatedBoard });
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
-  });
-  
-  //Update a specific task in the board
+
+  // Add tasks to a specific board
+router.put('/add/:id', async (req, res) => {
+  const { id } = req.params;
+  const { title, description, subtasks, status, boardId } = req.body;
+
+  try {
+    const board = await Board.findById(id);
+    const newTask = { title, description, subtasks, status, boardId };
+    board.tasks.push(newTask);
+    const updatedBoard = await board.save();
+
+    res.status(201).json({ message: 'Task added to board', updatedBoard });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 router.put('/update/:id', async (req, res) => {
-    const taskId = req.params.id;
-    const { title, description, subtasks, status } = req.body;
-    try {
-        const updateTask = await Task.findByIdAndUpdate(taskId,
-            { title, description, subtasks, status },
-            { new: true });
-        res.status(200).json({ message: "Task updated successfully", updateTask });
-    } catch (err) {
-        res.status(500).json({ message: "Error updating task", err: err });
-    }
+  const { id } = req.params;
+  const { title, description, subtasks, status } = req.body;
+
+  try {
+    const board = await Board.findOneAndUpdate(
+      { "tasks._id": id },
+      {
+        $set: {
+          "tasks.$.title": title,
+          "tasks.$.description": description,
+          "tasks.$.subtasks": subtasks,
+          "tasks.$.status": status
+        }
+      },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Task updated successfully", board });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating task", err: err });
+  }
+});
+
+router.get('/tasks', async (req, res) => {
+  try {
+    const boards = await Board.find();
+    const allTasks = boards.reduce((tasks, board) => {
+      return tasks.concat(board.tasks);
+    }, []);
+    res.status(200).json({ message: "All tasks fetched successfully", tasks: allTasks });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching tasks", err: err });
+  }
 });
 
 
+// Get all tasks from a specific board
+router.get('/tasks/board/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const board = await Board.findById(id);
+    const tasks = board.tasks;
+    res.status(200).json({ message: "Tasks fetched successfully", tasks });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching tasks", err: err });
+  }
+});
+
+// Delete a specific board
+router.delete('/delete/:id', async (req, res) => {
+    try {
+      const boardId = req.params.id;
+      // Remove the board
+      const deletedBoard = await Board.findByIdAndRemove(boardId);
+      // Remove the associated tasks
+      await Board.deleteMany({ boardId: boardId });
+      res.status(200).json({ message: "Board deleted successfully", deletedBoard });
+    } catch (err) {
+      res.status(500).json({ message: "Error deleting board", err: err });
+    }
+});
+  
+router.delete('/tasks/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+  const board = await Board.findOneAndUpdate(
+  { "tasks._id": id },
+  { $pull: { tasks: { _id: id } } },
+  { new: true }
+    );
+    res.status(200).json({ message: "Task deleted successfully", board });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting task", err: err });
+    }
+});
+    
 module.exports = router;
